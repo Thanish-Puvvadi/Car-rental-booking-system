@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: manivtha-tours-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # User will fill this in Render Dashboard with Atlas URI
+      - key: JWT_SECRET
+        generateValue: true
