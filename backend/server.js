@@ -16,14 +16,6 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Welcome to Manivtha Tours & Travels API',
-    status: 'Healthy',
-    timestamp: new Date()
-  });
-});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoutes);
@@ -31,6 +23,18 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/drivers', driverRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/reports', reportRoutes);
+
+// Serve static assets from Vite production build
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// SPA Routing fallback
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 // Global Error Handler
 app.use((err, req, res, next) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Info, Trip, CheckCircle, Clock } from 'lucide-react';
+import { Bell, Info, CheckCircle, Clock } from 'lucide-react';
 
 const Notifications = () => {
   const list = [
