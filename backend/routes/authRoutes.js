@@ -14,6 +14,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/profile', protect, getUserProfile);
 router.put('/profile', protect, updateUserProfile);
-router.get('/users', protect, authorize('admin'), getAllUsers);
+router.get('/users', protect, authorize('driver_coordinator', 'accounts'), getAllUsers);
 
 module.exports = router;

@@ -9,14 +9,6 @@ const AuditLog = require('../models/AuditLog');
 
 const users = [
   {
-    name: 'Manivtha Admin',
-    email: 'admin@manivtha.com',
-    password: 'admin123',
-    role: 'admin',
-    phone: '+91 99999 88888',
-    address: 'HQ Administrative Block, Bangalore, India'
-  },
-  {
     name: 'Suresh Coordinator',
     email: 'coordinator@manivtha.com',
     password: 'coordinator123',
@@ -172,7 +164,7 @@ const seedDB = async () => {
     console.log(`Seeded ${seededUsers.length} users successfully.`);
 
     const customerUser = seededUsers.find((u) => u.role === 'customer');
-    const adminUser = seededUsers.find((u) => u.role === 'admin');
+    const coordinatorUser = seededUsers.find((u) => u.role === 'driver_coordinator');
 
     // Seed vehicles
     const seededVehicles = await Vehicle.insertMany(vehicles);
@@ -260,17 +252,17 @@ const seedDB = async () => {
     // Seed some Audit Logs
     await AuditLog.create([
       {
-        user: adminUser._id,
+        user: coordinatorUser._id,
         action: 'System Seed',
         details: 'Database initialized with demo parameters'
       },
       {
-        user: adminUser._id,
+        user: coordinatorUser._id,
         action: 'Add Vehicle',
         details: 'Registered Honda City into fleet inventory'
       },
       {
-        user: adminUser._id,
+        user: coordinatorUser._id,
         action: 'Add Driver',
         details: 'Registered Karan Singh to roster'
       }

@@ -10,7 +10,7 @@ const { authorize } = require('../middleware/roleMiddleware');
 
 router.use(protect);
 
-router.post('/', authorize('admin', 'accounts'), recordPayment);
+router.post('/', authorize('accounts'), recordPayment);
 router.get('/', getPayments);
 router.get('/:id/invoice', getInvoice);
 

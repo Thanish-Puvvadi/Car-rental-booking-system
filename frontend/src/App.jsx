@@ -68,7 +68,7 @@ const App = () => {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute allowedRoles={['customer', 'admin', 'driver_coordinator', 'accounts']}>
+                <ProtectedRoute allowedRoles={['customer', 'driver_coordinator', 'accounts']}>
                   <MainLayout><DashboardSelector /></MainLayout>
                 </ProtectedRoute>
               }

@@ -5,7 +5,7 @@ const { protect } = require('../middleware/authMiddleware');
 const { authorize } = require('../middleware/roleMiddleware');
 
 router.post('/', createEnquiry);
-router.get('/', protect, authorize('admin', 'driver_coordinator', 'accounts'), getEnquiries);
-router.put('/:id', protect, authorize('admin', 'driver_coordinator', 'accounts'), updateEnquiry);
+router.get('/', protect, authorize('driver_coordinator', 'accounts'), getEnquiries);
+router.put('/:id', protect, authorize('driver_coordinator', 'accounts'), updateEnquiry);
 
 module.exports = router;
