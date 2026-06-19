@@ -144,6 +144,13 @@ const Login = () => {
               <ArrowRight className="w-3 h-3 text-amber-500" />
             </button>
             <button
+              onClick={() => handleQuickLogin('admin@manivtha.com', 'admin123')}
+              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
+            >
+              <span>Admin</span>
+              <ArrowRight className="w-3 h-3 text-amber-500" />
+            </button>
+            <button
               onClick={() => handleQuickLogin('coordinator@manivtha.com', 'coordinator123')}
               className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
             >

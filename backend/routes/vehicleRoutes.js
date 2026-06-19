@@ -15,8 +15,8 @@ router.get('/', getVehicles);
 router.get('/:id', getVehicleById);
 router.get('/:id/availability', checkVehicleAvailability);
 
-router.post('/', protect, authorize('driver_coordinator'), createVehicle);
-router.put('/:id', protect, authorize('driver_coordinator'), updateVehicle);
-router.delete('/:id', protect, authorize('driver_coordinator'), deleteVehicle);
+router.post('/', protect, authorize('admin'), createVehicle);
+router.put('/:id', protect, authorize('admin'), updateVehicle);
+router.delete('/:id', protect, authorize('admin'), deleteVehicle);
 
 module.exports = router;

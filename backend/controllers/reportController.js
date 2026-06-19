@@ -79,7 +79,7 @@ exports.getDashboardStats = async (req, res) => {
 
     // 6. Recent Audit Logs (Admin only)
     let recentLogs = [];
-    if (req.user.role !== 'customer') {
+    if (req.user.role === 'admin') {
       recentLogs = await AuditLog.find({})
         .populate('user', 'name role')
         .sort({ timestamp: -1 })

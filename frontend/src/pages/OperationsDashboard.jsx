@@ -123,7 +123,7 @@ const OperationsDashboard = () => {
       }
 
       // Fetch Drivers list (if allowed)
-      if (user.role === 'driver_coordinator') {
+      if (user.role === 'admin' || user.role === 'driver_coordinator') {
         const driversRes = await api.get('/drivers');
         if (driversRes.data && driversRes.data.success) {
           setDrivers(driversRes.data.drivers);
@@ -405,7 +405,7 @@ const OperationsDashboard = () => {
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
           </button>
-          {user.role === 'accounts' && (
+          {(user.role === 'admin' || user.role === 'accounts') && (
             <button
               onClick={handleExportCSV}
               className="flex items-center gap-1.5 px-4 py-2 bg-emerald-650 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs transition-all shadow-md"
@@ -458,7 +458,7 @@ const OperationsDashboard = () => {
           <Car className="w-4 h-4" /> Fleet Management ({vehicles.length})
         </button>
 
-        {user.role === 'driver_coordinator' && (
+        {(user.role === 'admin' || user.role === 'driver_coordinator') && (
           <button
             onClick={() => setActiveTab('drivers')}
             className={`pb-3 transition-colors flex items-center gap-1.5 ${
@@ -493,7 +493,7 @@ const OperationsDashboard = () => {
           <MessageSquare className="w-4 h-4" /> Outgoing Comms ({messageLogs.length})
         </button>
 
-        {(user.role === 'driver_coordinator' || user.role === 'accounts') && (
+        {user.role === 'admin' && (
           <button
             onClick={() => setActiveTab('logs')}
             className={`pb-3 transition-colors flex items-center gap-1.5 ${
@@ -708,8 +708,8 @@ const OperationsDashboard = () => {
                           </>
                         )}
 
-                        {/* 2. Approved: Roster assignment (Driver Coordinator only) */}
-                        {b.status === 'Approved' && user.role === 'driver_coordinator' && (
+                        {/* 2. Approved: Roster assignment (Admin & Driver Coordinator only) */}
+                        {b.status === 'Approved' && (user.role === 'admin' || user.role === 'driver_coordinator') && (
                           <div className="flex items-center gap-2">
                             <select
                               value={assigningDriverId[b._id] || ''}
@@ -738,8 +738,8 @@ const OperationsDashboard = () => {
                           </div>
                         )}
 
-                        {/* 3. Driver Assigned: Log invoice payment (Accounts only) */}
-                        {b.status === 'Driver Assigned' && user.role === 'accounts' && (
+                        {/* 3. Driver Assigned: Log invoice payment (Admin & Accounts only) */}
+                        {b.status === 'Driver Assigned' && (user.role === 'admin' || user.role === 'accounts') && (
                           <button
                             onClick={() => openPaymentModal(b)}
                             className="px-4 py-2 bg-indigo-650 hover:bg-indigo-755 text-white font-bold text-xs rounded-xl"
@@ -787,8 +787,8 @@ const OperationsDashboard = () => {
                           </div>
                         )}
 
-                        {/* Coordinator can delete completed or cancelled items */}
-                        {user.role === 'driver_coordinator' && b.status !== 'Pending' && b.status !== 'Approved' && (
+                        {/* Admin can delete anything */}
+                        {user.role === 'admin' && b.status !== 'Pending' && b.status !== 'Approved' && (
                           <button
                             onClick={() => handleDeleteBooking(b._id)}
                             className="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl"
@@ -811,7 +811,7 @@ const OperationsDashboard = () => {
       {activeTab === 'fleet' && (
         <div className="space-y-6 animate-fade-in text-left">
           {/* Header Controls */}
-          {user.role === 'driver_coordinator' && (
+          {user.role === 'admin' && (
             <div className="flex justify-end">
               <button
                 onClick={() => setShowVehicleModal(true)}
@@ -874,7 +874,7 @@ const OperationsDashboard = () => {
                     </button>
                   </div>
 
-                  {user.role === 'driver_coordinator' && (
+                  {user.role === 'admin' && (
                     <button
                       onClick={() => handleDeleteVehicle(v._id)}
                       className="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded"
@@ -890,9 +890,9 @@ const OperationsDashboard = () => {
       )}
 
       {/* Drivers tab */}
-      {activeTab === 'drivers' && user.role === 'driver_coordinator' && (
+      {activeTab === 'drivers' && (user.role === 'admin' || user.role === 'driver_coordinator') && (
         <div className="space-y-6 animate-fade-in text-left">
-          {user.role === 'driver_coordinator' && (
+          {user.role === 'admin' && (
             <div className="flex justify-end">
               <button
                 onClick={() => setShowDriverModal(true)}
@@ -929,7 +929,7 @@ const OperationsDashboard = () => {
                   </div>
                 </div>
 
-                {user.role === 'driver_coordinator' && (
+                {user.role === 'admin' && (
                   <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-3 flex justify-end">
                     <button
                       onClick={() => handleDeleteDriver(d._id)}
@@ -946,7 +946,7 @@ const OperationsDashboard = () => {
       )}
 
       {/* Logs tab */}
-      {activeTab === 'logs' && (user.role === 'driver_coordinator' || user.role === 'accounts') && (
+      {activeTab === 'logs' && user.role === 'admin' && (
         <div className="p-6 rounded-3xl glass-card space-y-4 animate-fade-in text-left">
           <h3 className="text-lg font-bold">System Roster Audit Ledger</h3>
           <div className="overflow-x-auto">
