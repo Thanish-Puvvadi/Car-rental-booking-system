@@ -13,7 +13,7 @@ const generateToken = (id) => {
 // @access  Public
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, phone, address, role } = req.body;
+    const { name, email, password, phone, address, role, drivingLicense, dob, emergencyContact } = req.body;
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -30,6 +30,9 @@ exports.registerUser = async (req, res) => {
       phone,
       address,
       role: role || 'customer',
+      drivingLicense,
+      dob,
+      emergencyContact,
     });
 
     res.status(201).json({
@@ -42,6 +45,9 @@ exports.registerUser = async (req, res) => {
         role: user.role,
         phone: user.phone,
         address: user.address,
+        drivingLicense: user.drivingLicense,
+        dob: user.dob,
+        emergencyContact: user.emergencyContact,
       },
     });
   } catch (error) {
@@ -78,6 +84,9 @@ exports.loginUser = async (req, res) => {
         role: user.role,
         phone: user.phone,
         address: user.address,
+        drivingLicense: user.drivingLicense,
+        dob: user.dob,
+        emergencyContact: user.emergencyContact,
       },
     });
   } catch (error) {
@@ -101,6 +110,9 @@ exports.getUserProfile = async (req, res) => {
           role: user.role,
           phone: user.phone,
           address: user.address,
+          drivingLicense: user.drivingLicense,
+          dob: user.dob,
+          emergencyContact: user.emergencyContact,
         },
       });
     } else {
@@ -122,6 +134,9 @@ exports.updateUserProfile = async (req, res) => {
       user.name = req.body.name || user.name;
       user.phone = req.body.phone || user.phone;
       user.address = req.body.address || user.address;
+      user.drivingLicense = req.body.drivingLicense !== undefined ? req.body.drivingLicense : user.drivingLicense;
+      user.dob = req.body.dob !== undefined ? req.body.dob : user.dob;
+      user.emergencyContact = req.body.emergencyContact !== undefined ? req.body.emergencyContact : user.emergencyContact;
       
       if (req.body.password) {
         user.password = req.body.password;
@@ -138,6 +153,9 @@ exports.updateUserProfile = async (req, res) => {
           role: updatedUser.role,
           phone: updatedUser.phone,
           address: updatedUser.address,
+          drivingLicense: updatedUser.drivingLicense,
+          dob: updatedUser.dob,
+          emergencyContact: updatedUser.emergencyContact,
         },
       });
     } else {

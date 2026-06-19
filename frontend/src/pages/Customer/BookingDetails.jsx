@@ -238,6 +238,50 @@ const BookingDetails = () => {
           </div>
         </div>
       )}
+
+      {/* booking confirmation messages generator */}
+      <div className="p-6 rounded-3xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+        <h4 className="font-bold text-lg flex items-center gap-2">
+          <FileText className="w-5 h-5 text-amber-550" /> Message Dispatch Template
+        </h4>
+        <p className="text-xs text-slate-450 leading-relaxed">
+          Generate custom booking confirmation messages matching the current status to send via SMS/WhatsApp:
+        </p>
+
+        {(() => {
+          let messageText = '';
+          if (booking.status === 'Pending') {
+            messageText = `Dear ${booking.customerName}, your travel booking request (ID: #${booking._id.toString().toUpperCase()}) is received. We are verifying vehicle availability. Thank you, Manivtha Travels.`;
+          } else if (booking.status === 'Approved') {
+            messageText = `Dear ${booking.customerName}, your booking reservation (ID: #${booking._id.toString().toUpperCase()}) is approved. A coordinator will assign driver details shortly. Thank you, Manivtha Travels.`;
+          } else if (booking.status === 'Driver Assigned') {
+            messageText = `Dear ${booking.customerName}, chauffeur assigned! Vehicle: ${booking.vehicle?.brand} ${booking.vehicle?.model} (${booking.vehicle?.registrationNumber}). Driver: ${booking.driver?.name} (${booking.driver?.phoneNumber}). Roster fare: ₹${booking.totalCost}. Thank you, Manivtha Travels.`;
+          } else if (booking.status === 'Payment Completed') {
+            messageText = `Dear ${booking.customerName}, payment received! Your trip from ${booking.pickupLocation} to ${booking.dropLocation} (Total: ₹${booking.totalCost}) is paid. Download invoice logs at http://localhost:5000/bookings/${booking._id}. Thank you, Manivtha Travels.`;
+          } else if (booking.status === 'Trip Started') {
+            messageText = `Dear ${booking.customerName}, your trip has started! Chauffeur: ${booking.driver?.name}. Travel safely! Helpline: +91 98765 43210. Manivtha Travels.`;
+          } else if (booking.status === 'Trip Completed') {
+            messageText = `Dear ${booking.customerName}, your journey (ID: #${booking._id.toString().slice(-6).toUpperCase()}) is completed. Thank you for choosing Manivtha Travels!`;
+          }
+
+          return (
+            <div className="space-y-3">
+              <div className="p-3.5 bg-white dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono select-all text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+                {messageText}
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(messageText);
+                  alert('Message template copied to clipboard!');
+                }}
+                className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl transition-all flex items-center gap-1.5"
+              >
+                Copy Message Template
+              </button>
+            </div>
+          );
+        })()}
+      </div>
     </div>
   );
 };

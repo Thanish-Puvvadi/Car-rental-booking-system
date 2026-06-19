@@ -43,14 +43,21 @@ const VehicleDetails = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  // Sync user context
+  // Sync user context or clear on logout/unauthenticated
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
         ...prev,
-        customerName: user.name,
+        customerName: user.name || '',
         mobileNumber: user.phone || '',
-        email: user.email,
+        email: user.email || '',
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        customerName: '',
+        mobileNumber: '',
+        email: '',
       }));
     }
   }, [user]);
@@ -302,6 +309,7 @@ const VehicleDetails = () => {
                     type="text"
                     name="customerName"
                     required
+                    autoComplete="off"
                     value={formData.customerName}
                     onChange={handleChange}
                     className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-slate-905 dark:text-white"
@@ -317,6 +325,7 @@ const VehicleDetails = () => {
                       type="text"
                       name="mobileNumber"
                       required
+                      autoComplete="off"
                       value={formData.mobileNumber}
                       onChange={handleChange}
                       className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-slate-905 dark:text-white"
@@ -330,6 +339,7 @@ const VehicleDetails = () => {
                       type="email"
                       name="email"
                       required
+                      autoComplete="off"
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-slate-905 dark:text-white"

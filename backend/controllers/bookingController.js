@@ -2,6 +2,8 @@ const Booking = require('../models/Booking');
 const Vehicle = require('../models/Vehicle');
 const Driver = require('../models/Driver');
 const AuditLog = require('../models/AuditLog');
+const Notification = require('../models/Notification');
+const { sendAutomatedMessages } = require('../utils/messagingService');
 
 // Helper to calculate days between two dates
 const calculateDays = (startDate, endDate) => {
@@ -79,6 +81,17 @@ exports.createBooking = async (req, res) => {
       totalCost,
       status: 'Pending',
     });
+
+    // Create Notification
+    await Notification.create({
+      user: req.user._id,
+      title: 'Booking Request Received',
+      body: `Your booking request for vehicle ${vehicle.brand} ${vehicle.model} (ID: ${booking._id}) has been filed and is awaiting review.`,
+      type: 'info'
+    });
+
+    // Trigger Automated Email & WhatsApp Confirmation
+    await sendAutomatedMessages(booking, 'Pending');
 
     // Create Audit Log
     await AuditLog.create({
@@ -190,6 +203,36 @@ exports.updateBookingStatus = async (req, res) => {
 
     await booking.save();
 
+    // Create status notifications for user
+    let title = 'Booking Status Updated';
+    let body = `Your booking ID ${booking._id} has been moved to '${status}'.`;
+    let type = 'info';
+
+    if (status === 'Approved') {
+      title = 'Booking Reservation Approved';
+      body = `Great news! Your rental request for ${booking.vehicle.brand} ${booking.vehicle.model} has been approved. A driver coordinator is rostering your chauffeur now.`;
+      type = 'success';
+    } else if (status === 'Trip Started') {
+      title = 'Trip Journey Started!';
+      body = `Your rental trip from ${booking.pickupLocation} to ${booking.dropLocation} has commenced. Travel safely!`;
+      type = 'success';
+    } else if (status === 'Trip Completed') {
+      title = 'Trip Concluded';
+      body = `Thank you for choosing Manivtha Tours & Travels. Your booking ID ${booking._id} is complete.`;
+      type = 'info';
+    }
+
+    await Notification.create({
+      user: booking.user._id || booking.user,
+      title,
+      body,
+      type
+    });
+
+    // Trigger Automated Email & WhatsApp Status Update
+    const populatedBooking = await Booking.findById(booking._id).populate('vehicle').populate('driver');
+    await sendAutomatedMessages(populatedBooking, status);
+
     // Log the action
     await AuditLog.create({
       user: req.user._id,
@@ -237,6 +280,18 @@ exports.assignDriver = async (req, res) => {
     // Let's set driver availabilityStatus to 'Busy' when assigned so they don't get double assigned.
     driver.availabilityStatus = 'Busy';
     await driver.save();
+
+    // Create Notification
+    await Notification.create({
+      user: booking.user,
+      title: 'Chauffeur Rostered',
+      body: `Driver ${driver.name} (Phone: ${driver.phoneNumber}) has been assigned to your booking.`,
+      type: 'success'
+    });
+
+    // Trigger Automated Email & WhatsApp Driver Assignment
+    const populatedBooking = await Booking.findById(booking._id).populate('vehicle').populate('driver');
+    await sendAutomatedMessages(populatedBooking, 'Driver Assigned');
 
     await AuditLog.create({
       user: req.user._id,

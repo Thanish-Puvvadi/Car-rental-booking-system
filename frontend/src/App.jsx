@@ -7,7 +7,6 @@ import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
-import DashboardLayout from './components/DashboardLayout';
 
 // Public Pages
 import Home from './pages/Home';
@@ -26,16 +25,16 @@ import MyBookings from './pages/Customer/MyBookings';
 import BookingDetails from './pages/Customer/BookingDetails';
 import Profile from './pages/Customer/Profile';
 import Notifications from './pages/Customer/Notifications';
+import OperationsDashboard from './pages/OperationsDashboard';
+import { useAuth } from './context/AuthContext';
 
-// Admin Pages
-import AdminDashboard from './pages/Admin/AdminDashboard';
-import VehicleManagement from './pages/Admin/VehicleManagement';
-import DriverManagement from './pages/Admin/DriverManagement';
-import CustomerManagement from './pages/Admin/CustomerManagement';
-import BookingManagement from './pages/Admin/BookingManagement';
-import PaymentManagement from './pages/Admin/PaymentManagement';
-import ReportsAnalytics from './pages/Admin/ReportsAnalytics';
-import Settings from './pages/Admin/Settings';
+const DashboardSelector = () => {
+  const { user } = useAuth();
+  if (user?.role === 'customer') {
+    return <CustomerDashboard />;
+  }
+  return <OperationsDashboard />;
+};
 
 // Shared Layout Wrapper for Public and Customer Pages
 const MainLayout = ({ children }) => {
@@ -65,12 +64,12 @@ const App = () => {
             <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
             <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
 
-            {/* CUSTOMER PROTECTED ROUTES */}
+            {/* PROTECTED DASHBOARD ROUTES */}
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute allowedRoles={['customer']}>
-                  <MainLayout><CustomerDashboard /></MainLayout>
+                <ProtectedRoute allowedRoles={['customer', 'admin', 'driver_coordinator', 'accounts']}>
+                  <MainLayout><DashboardSelector /></MainLayout>
                 </ProtectedRoute>
               }
             />
@@ -107,71 +106,6 @@ const App = () => {
               }
             />
 
-            {/* ADMIN & STAFF PORTAL ROUTES */}
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute allowedRoles={['admin', 'driver_coordinator', 'accounts']}>
-                  <DashboardLayout><AdminDashboard /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/vehicles"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <DashboardLayout><VehicleManagement /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/drivers"
-              element={
-                <ProtectedRoute allowedRoles={['admin', 'driver_coordinator']}>
-                  <DashboardLayout><DriverManagement /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/customers"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <DashboardLayout><CustomerManagement /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/bookings"
-              element={
-                <ProtectedRoute allowedRoles={['admin', 'driver_coordinator', 'accounts']}>
-                  <DashboardLayout><BookingManagement /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/payments"
-              element={
-                <ProtectedRoute allowedRoles={['admin', 'accounts']}>
-                  <DashboardLayout><PaymentManagement /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/reports"
-              element={
-                <ProtectedRoute allowedRoles={['admin', 'accounts']}>
-                  <DashboardLayout><ReportsAnalytics /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/settings"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <DashboardLayout><Settings /></DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
 
             {/* Fallback Route */}
             <Route path="*" element={<Navigate to="/" replace />} />

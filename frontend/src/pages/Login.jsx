@@ -29,12 +29,7 @@ const Login = () => {
         navigate(from, { replace: true });
         return;
       }
-
-      if (loggedUser.role === 'customer') {
-        navigate('/dashboard');
-      } else {
-        navigate('/admin/dashboard');
-      }
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Incorrect email or password.');
     } finally {
@@ -47,12 +42,8 @@ const Login = () => {
     setError(null);
     setLoading(true);
     try {
-      const loggedUser = await login(demoEmail, demoPassword);
-      if (loggedUser.role === 'customer') {
-        navigate('/dashboard');
-      } else {
-        navigate('/admin/dashboard');
-      }
+      await login(demoEmail, demoPassword);
+      navigate('/dashboard');
     } catch (err) {
       setError('Seeding required. Run backend seed script.');
     } finally {
@@ -140,38 +131,38 @@ const Login = () => {
         </form>
 
         {/* Quick Demo Pre-fills Panel */}
-        <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-6 space-y-3 relative z-10 text-xs">
-          <p className="font-bold text-slate-500 dark:text-slate-450 uppercase tracking-wider text-xxs">
-            Quick Staff & Demo Logins:
+        <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-6 space-y-2 relative z-10 text-xs">
+          <p className="font-bold text-slate-500 dark:text-slate-455 uppercase tracking-wider text-xxs">
+            Quick Demo Portals:
           </p>
-          <div className="grid grid-cols-2 gap-2 text-xxs">
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => handleQuickLogin('customer@gmail.com', 'customer123')}
+              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
+            >
+              <span>Customer</span>
+              <ArrowRight className="w-3 h-3 text-amber-500" />
+            </button>
             <button
               onClick={() => handleQuickLogin('admin@manivtha.com', 'admin123')}
-              className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold"
+              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
             >
               <span>Admin</span>
-              <ArrowRight className="w-3.5 h-3.5 text-amber-500" />
+              <ArrowRight className="w-3 h-3 text-amber-500" />
             </button>
             <button
               onClick={() => handleQuickLogin('coordinator@manivtha.com', 'coordinator123')}
-              className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold"
+              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
             >
               <span>Coordinator</span>
-              <ArrowRight className="w-3.5 h-3.5 text-amber-500" />
+              <ArrowRight className="w-3 h-3 text-amber-500" />
             </button>
             <button
               onClick={() => handleQuickLogin('accounts@manivtha.com', 'accounts123')}
-              className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold"
+              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
             >
               <span>Accounts</span>
-              <ArrowRight className="w-3.5 h-3.5 text-amber-500" />
-            </button>
-            <button
-              onClick={() => handleQuickLogin('customer@gmail.com', 'customer123')}
-              className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold"
-            >
-              <span>Customer</span>
-              <ArrowRight className="w-3.5 h-3.5 text-amber-500" />
+              <ArrowRight className="w-3 h-3 text-amber-500" />
             </button>
           </div>
         </div>

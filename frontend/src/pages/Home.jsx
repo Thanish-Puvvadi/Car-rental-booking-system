@@ -50,14 +50,43 @@ const Home = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  // Sync user info if loaded later
+  // Enquiry state variables
+  const [enquiryForm, setEnquiryForm] = useState({ name: '', email: '', message: '' });
+  const [enquirySuccess, setEnquirySuccess] = useState(false);
+  const [enquiryLoading, setEnquiryLoading] = useState(false);
+
+  const handleEnquirySubmit = async (e) => {
+    e.preventDefault();
+    setEnquiryLoading(true);
+    setEnquirySuccess(false);
+    try {
+      const res = await api.post('/enquiries', enquiryForm);
+      if (res.data && res.data.success) {
+        setEnquirySuccess(true);
+        setEnquiryForm({ name: '', email: '', message: '' });
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to submit enquiry.');
+    } finally {
+      setEnquiryLoading(false);
+    }
+  };
+
+  // Sync user info if loaded later or clear on logout
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
         ...prev,
-        customerName: user.name,
+        customerName: user.name || '',
         mobileNumber: user.phone || '',
-        email: user.email,
+        email: user.email || '',
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        customerName: '',
+        mobileNumber: '',
+        email: '',
       }));
     }
   }, [user]);
@@ -283,6 +312,7 @@ const Home = () => {
                         type="text"
                         name="customerName"
                         required
+                        autoComplete="off"
                         value={formData.customerName}
                         onChange={handleChange}
                         className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-lg focus:border-amber-500 outline-none transition-all text-slate-900 dark:text-white"
@@ -296,6 +326,7 @@ const Home = () => {
                         type="text"
                         name="mobileNumber"
                         required
+                        autoComplete="off"
                         value={formData.mobileNumber}
                         onChange={handleChange}
                         className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-lg focus:border-amber-500 outline-none transition-all text-slate-900 dark:text-white"
@@ -677,29 +708,49 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white/5 dark:bg-slate-950/20 backdrop-blur-xs p-6 rounded-2xl border border-white/10 space-y-4">
+          <form onSubmit={handleEnquirySubmit} className="bg-white/5 dark:bg-slate-950/20 backdrop-blur-xs p-6 rounded-2xl border border-white/10 space-y-4">
             <h4 className="font-bold text-lg">Send Instant Query</h4>
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg outline-none focus:border-amber-500 text-white"
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg outline-none focus:border-amber-500 text-white"
-              />
-              <textarea
-                placeholder="Trip requirements..."
-                rows="3"
-                className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg outline-none focus:border-amber-500 text-white resize-none"
-              />
-              <button className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-sm transition-all">
-                Send Query
-              </button>
-            </div>
-          </div>
+            {enquirySuccess ? (
+              <div className="p-4 bg-emerald-500/10 border border-emerald-550/20 text-emerald-400 rounded-xl text-xs text-center space-y-1">
+                <p className="font-bold">Query Received!</p>
+                <p className="text-xxs text-slate-400">Our dispatch coordinator will reach out to you shortly.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  required
+                  placeholder="Your Name"
+                  value={enquiryForm.name}
+                  onChange={(e) => setEnquiryForm(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg outline-none focus:border-amber-500 text-white"
+                />
+                <input
+                  type="email"
+                  required
+                  placeholder="Email Address"
+                  value={enquiryForm.email}
+                  onChange={(e) => setEnquiryForm(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg outline-none focus:border-amber-500 text-white"
+                />
+                <textarea
+                  required
+                  placeholder="Trip requirements..."
+                  rows="3"
+                  value={enquiryForm.message}
+                  onChange={(e) => setEnquiryForm(prev => ({ ...prev, message: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg outline-none focus:border-amber-500 text-white resize-none"
+                />
+                <button
+                  type="submit"
+                  disabled={enquiryLoading}
+                  className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-sm transition-all flex items-center justify-center"
+                >
+                  {enquiryLoading ? <Spinner size="sm" color="white" /> : 'Send Query'}
+                </button>
+              </div>
+            )}
+          </form>
         </div>
       </section>
     </div>

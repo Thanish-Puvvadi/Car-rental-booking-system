@@ -84,7 +84,7 @@ const vehicles = [
     fuelType: 'Petrol',
     seatingCapacity: 7,
     dailyPrice: 4800,
-    image: 'https://images.unsplash.com/photo-1669023414166-a4cf7c0fd1f2?auto=format&fit=crop&q=80&w=600',
+    image: '/images/mahindra_xuv700.png',
     availabilityStatus: 'Available'
   },
   {
@@ -139,8 +139,17 @@ const seedDB = async () => {
   try {
     if (mongoose.connection.readyState !== 1) {
       const connStr = process.env.MONGODB_URI || 'mongodb://localhost:27017/manivtha_tours';
-      await mongoose.connect(connStr);
-      console.log('Connected to database for seeding...');
+      try {
+        await mongoose.connect(connStr, { serverSelectionTimeoutMS: 2000 });
+        console.log('Connected to database for seeding...');
+      } catch (connErr) {
+        console.log('Connection to standard database failed. Using In-Memory database fallback...');
+        const { MongoMemoryServer } = require('mongodb-memory-server');
+        const mongoServer = await MongoMemoryServer.create();
+        const memConnStr = mongoServer.getUri();
+        await mongoose.connect(memConnStr);
+        console.log('Connected to In-Memory database for seeding...');
+      }
     }
 
     // Clear all existing data

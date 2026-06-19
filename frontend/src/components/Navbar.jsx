@@ -17,17 +17,10 @@ const Navbar = () => {
   };
 
   const getDashboardPath = () => {
-    if (!user) return '/';
-    switch (user.role) {
-      case 'admin':
-        return '/admin/dashboard';
-      case 'driver_coordinator':
-        return '/admin/dashboard'; // Both use DashboardLayout with role customized links
-      case 'accounts':
-        return '/admin/dashboard';
-      default:
-        return '/dashboard'; // Customer dashboard
+    if (user) {
+      return '/dashboard';
     }
+    return '/';
   };
 
   const links = [

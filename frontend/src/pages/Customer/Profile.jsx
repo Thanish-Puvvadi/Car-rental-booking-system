@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { User, Phone, MapPin, Lock, CheckCircle, ShieldAlert } from 'lucide-react';
+import { User, Phone, MapPin, Lock, CheckCircle, ShieldAlert, Calendar, Contact, FileText } from 'lucide-react';
 import Spinner from '../../components/UI/Spinner';
 
 const Profile = () => {
@@ -9,6 +9,9 @@ const Profile = () => {
     name: user?.name || '',
     phone: user?.phone || '',
     address: user?.address || '',
+    drivingLicense: user?.drivingLicense || '',
+    dob: user?.dob ? user.dob.split('T')[0] : '',
+    emergencyContact: user?.emergencyContact || '',
     password: '',
   });
 
@@ -102,6 +105,50 @@ const Profile = () => {
                 type="text"
                 name="address"
                 value={formData.address}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-2.5 border border-slate-250 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-sm text-slate-905 dark:text-white focus:border-amber-500 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xxs font-bold text-slate-450 uppercase">Driving License Number</label>
+            <div className="relative">
+              <FileText className="absolute left-3 top-3.5 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                name="drivingLicense"
+                placeholder="DL-XXXXXXXXXXXXX"
+                value={formData.drivingLicense}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-2.5 border border-slate-250 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-sm text-slate-905 dark:text-white focus:border-amber-500 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xxs font-bold text-slate-450 uppercase">Date of Birth</label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-3.5 w-4 h-4 text-slate-400" />
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-2.5 border border-slate-250 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-sm text-slate-905 dark:text-white focus:border-amber-500 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xxs font-bold text-slate-450 uppercase">Emergency Contact Number</label>
+            <div className="relative">
+              <Contact className="absolute left-3 top-3.5 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                name="emergencyContact"
+                placeholder="+91 XXXXX XXXXX"
+                value={formData.emergencyContact}
                 onChange={handleChange}
                 className="w-full pl-10 pr-4 py-2.5 border border-slate-250 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 rounded-xl outline-none text-sm text-slate-905 dark:text-white focus:border-amber-500 transition-all"
               />

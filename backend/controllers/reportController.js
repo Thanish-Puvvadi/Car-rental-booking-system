@@ -155,3 +155,19 @@ exports.exportBookingsCSV = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Get all automated outgoing communication message logs
+// @route   GET /api/reports/message-logs
+// @access  Private (Staff only)
+exports.getMessageLogs = async (req, res) => {
+  try {
+    const MessageLog = require('../models/MessageLog');
+    const logs = await MessageLog.find({})
+      .populate('booking')
+      .sort({ createdAt: -1 })
+      .limit(100);
+    res.json({ success: true, count: logs.length, logs });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

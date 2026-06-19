@@ -8,6 +8,8 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const driverRoutes = require('./routes/driverRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const enquiryRoutes = require('./routes/enquiryRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/drivers', driverRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/enquiries', enquiryRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Serve static assets from Vite production build
 const path = require('path');

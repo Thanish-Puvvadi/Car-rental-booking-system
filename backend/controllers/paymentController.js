@@ -35,6 +35,20 @@ exports.recordPayment = async (req, res) => {
     booking.status = 'Payment Completed';
     await booking.save();
 
+    // Create Notification
+    const Notification = require('../models/Notification');
+    await Notification.create({
+      user: booking.user,
+      title: 'Payment Logged & Confirmed',
+      body: `Your payment of ₹${amount} for booking ID ${bookingId} has been successfully recorded. Your invoice PDF is now ready to download.`,
+      type: 'success'
+    });
+
+    // Trigger Automated Email & WhatsApp Confirmation
+    const { sendAutomatedMessages } = require('../utils/messagingService');
+    const populatedBooking = await Booking.findById(booking._id).populate('vehicle').populate('driver');
+    await sendAutomatedMessages(populatedBooking, 'Payment Completed');
+
     // Audit Log
     await AuditLog.create({
       user: req.user._id,

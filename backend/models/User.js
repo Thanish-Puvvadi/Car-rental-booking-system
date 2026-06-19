@@ -34,6 +34,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    drivingLicense: {
+      type: String,
+      trim: true,
+    },
+    dob: {
+      type: Date,
+    },
+    emergencyContact: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,
