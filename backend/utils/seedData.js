@@ -84,7 +84,7 @@ const vehicles = [
     fuelType: 'Petrol',
     seatingCapacity: 7,
     dailyPrice: 4800,
-    image: '/images/mahindra_xuv700.png',
+    image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&q=80&w=600',
     availabilityStatus: 'Available'
   },
   {
@@ -95,7 +95,7 @@ const vehicles = [
     fuelType: 'Diesel',
     seatingCapacity: 12,
     dailyPrice: 6500,
-    image: '/images/force_traveller.jpg',
+    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=600',
     availabilityStatus: 'Available'
   },
   {
