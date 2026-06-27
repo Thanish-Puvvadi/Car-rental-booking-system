@@ -186,6 +186,21 @@ const Home = () => {
       const res = await api.post('/bookings', formData);
       if (res.data && res.data.success) {
         setSubmitSuccess(true);
+
+        // Send WhatsApp confirmation to the entered mobile number
+        let phone = formData.mobileNumber.replace(/\D/g, '');
+        if (phone.length === 10) {
+          phone = '91' + phone; // Default to India country code if 10 digits
+        }
+
+        const selectedVehicle = vehicles.find((v) => v._id === formData.vehicleId);
+        const carName = selectedVehicle ? `${selectedVehicle.brand} ${selectedVehicle.model}` : 'Selected Car';
+
+        const message = `*Booking Confirmed!*\n\nHi ${formData.customerName},\nYour booking request has been received and confirmed. Here are your trip details:\n\n*Customer Details:*\n- Name: ${formData.customerName}\n- Phone: ${formData.mobileNumber}\n${formData.email ? `- Email: ${formData.email}\n` : ''}\n*Trip Details:*\n- Trip Type: ${formData.tripType}\n- Pickup Location: ${formData.pickupLocation}\n- Drop Location: ${formData.dropLocation}\n- Start Date: ${formData.rentalDate}\n- End Date: ${formData.returnDate}\n- Passengers: ${formData.passengers}\n- Vehicle: ${carName}\n- Estimated Fare: ₹${estimatedCost.toLocaleString()}\n\nThank you for choosing Manivtha Tours & Travels!`;
+        
+        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+
         // Clear non-user fields
         setFormData((prev) => ({
           ...prev,

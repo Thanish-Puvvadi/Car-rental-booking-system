@@ -307,12 +307,16 @@ exports.assignDriver = async (req, res) => {
 
 // @desc    Delete booking (Admin only)
 // @route   DELETE /api/bookings/:id
-// @access  Private/Admin
+// @access  Private
 exports.deleteBooking = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Booking not found' });
+    }
+
+    if (req.user.role !== 'admin' && booking.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized to delete this booking' });
     }
 
     // Clean up driver status if active

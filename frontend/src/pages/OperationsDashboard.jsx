@@ -1301,7 +1301,6 @@ const OperationsDashboard = () => {
                 >
                   <option>Petrol</option>
                   <option>Diesel</option>
-                  <option>Electric</option>
                   <option>Hybrid</option>
                 </select>
               </div>

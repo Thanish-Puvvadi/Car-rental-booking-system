@@ -95,7 +95,7 @@ const vehicles = [
     fuelType: 'Diesel',
     seatingCapacity: 12,
     dailyPrice: 6500,
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=600', // standard bus/van picture
+    image: '/images/force_traveller.jpg',
     availabilityStatus: 'Available'
   },
   {
@@ -108,6 +108,28 @@ const vehicles = [
     dailyPrice: 7000,
     image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=600',
     availabilityStatus: 'Maintenance'
+  },
+  {
+    name: 'Toyota Camry Hybrid',
+    brand: 'Toyota',
+    model: '2023 Hybrid',
+    registrationNumber: 'KA-01-HY-1111',
+    fuelType: 'Hybrid',
+    seatingCapacity: 5,
+    dailyPrice: 5500,
+    image: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fd?auto=format&fit=crop&q=80&w=600',
+    availabilityStatus: 'Available'
+  },
+  {
+    name: 'Honda City e:HEV',
+    brand: 'Honda',
+    model: '2023 ZX e:HEV',
+    registrationNumber: 'KA-03-HY-2222',
+    fuelType: 'Hybrid',
+    seatingCapacity: 5,
+    dailyPrice: 3500,
+    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=600',
+    availabilityStatus: 'Available'
   }
 ];
 

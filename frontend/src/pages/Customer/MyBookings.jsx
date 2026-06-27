@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
-import { ArrowRight, Compass, Search, Calendar } from 'lucide-react';
+import { ArrowRight, Compass, Search, Calendar, Trash2 } from 'lucide-react';
 import Spinner from '../../components/UI/Spinner';
 
 const MyBookings = () => {
@@ -28,6 +28,19 @@ const MyBookings = () => {
   const filteredBookings = statusFilter
     ? bookings.filter((b) => b.status === statusFilter)
     : bookings;
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this booking?')) {
+      try {
+        const res = await api.delete(`/bookings/${id}`);
+        if (res.data && res.data.success) {
+          setBookings((prev) => prev.filter((b) => b._id !== id));
+        }
+      } catch (err) {
+        alert(err.response?.data?.message || 'Failed to delete booking');
+      }
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 text-left">
@@ -128,12 +141,21 @@ const MyBookings = () => {
                   <span className="text-xxs text-slate-400 block font-semibold">({b.totalDays} Days)</span>
                 </div>
 
-                <Link
-                  to={`/bookings/${b._id}`}
-                  className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-indigo-400 rounded-xl font-semibold text-xs transition-all"
-                >
-                  Manage <ArrowRight className="w-4 h-4" />
-                </Link>
+                <div className="flex items-center gap-2 mt-2 md:mt-0">
+                  <button
+                    onClick={() => handleDelete(b._id)}
+                    title="Delete Booking"
+                    className="p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/30 dark:hover:bg-rose-900/50 dark:text-rose-400 rounded-xl transition-all flex items-center justify-center"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <Link
+                    to={`/bookings/${b._id}`}
+                    className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-indigo-400 rounded-xl font-semibold text-xs transition-all"
+                  >
+                    Manage <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

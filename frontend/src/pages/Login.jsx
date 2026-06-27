@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Car, Mail, Lock, ShieldAlert, ArrowRight } from 'lucide-react';
+import { Car, Mail, Lock, ShieldAlert } from 'lucide-react';
 import Spinner from '../components/UI/Spinner';
 
 const Login = () => {
@@ -37,19 +37,7 @@ const Login = () => {
     }
   };
 
-  // Demo Credentials helper
-  const handleQuickLogin = async (demoEmail, demoPassword) => {
-    setError(null);
-    setLoading(true);
-    try {
-      await login(demoEmail, demoPassword);
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Seeding required. Run backend seed script.');
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 transition-colors">
@@ -130,42 +118,7 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Quick Demo Pre-fills Panel */}
-        <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-6 space-y-2 relative z-10 text-xs">
-          <p className="font-bold text-slate-500 dark:text-slate-455 uppercase tracking-wider text-xxs">
-            Quick Demo Portals:
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => handleQuickLogin('customer@gmail.com', 'customer123')}
-              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
-            >
-              <span>Customer</span>
-              <ArrowRight className="w-3 h-3 text-amber-500" />
-            </button>
-            <button
-              onClick={() => handleQuickLogin('admin@manivtha.com', 'admin123')}
-              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
-            >
-              <span>Admin</span>
-              <ArrowRight className="w-3 h-3 text-amber-500" />
-            </button>
-            <button
-              onClick={() => handleQuickLogin('coordinator@manivtha.com', 'coordinator123')}
-              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
-            >
-              <span>Coordinator</span>
-              <ArrowRight className="w-3 h-3 text-amber-500" />
-            </button>
-            <button
-              onClick={() => handleQuickLogin('accounts@manivtha.com', 'accounts123')}
-              className="flex items-center justify-between p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-700 dark:text-slate-300 font-semibold text-xxs"
-            >
-              <span>Accounts</span>
-              <ArrowRight className="w-3 h-3 text-amber-500" />
-            </button>
-          </div>
-        </div>
+
 
         <div className="text-center pt-2 text-xs text-slate-500 relative z-10">
           <span>Don't have an account? </span>

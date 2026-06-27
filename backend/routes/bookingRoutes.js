@@ -19,6 +19,6 @@ router.get('/:id', getBookingById);
 
 router.put('/:id/status', authorize('admin', 'driver_coordinator', 'accounts'), updateBookingStatus);
 router.put('/:id/assign-driver', authorize('admin', 'driver_coordinator'), assignDriver);
-router.delete('/:id', authorize('admin'), deleteBooking);
+router.delete('/:id', deleteBooking);
 
 module.exports = router;
