@@ -12,7 +12,7 @@ const MyBookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const res = await api.get('/bookings');
+        const res = await api.get('/api/bookings');
         if (res.data && res.data.success) {
           setBookings(res.data.bookings);
         }
@@ -32,7 +32,7 @@ const MyBookings = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this booking?')) {
       try {
-        const res = await api.delete(`/bookings/${id}`);
+        const res = await api.delete(`/api/bookings/${id}`);
         if (res.data && res.data.success) {
           setBookings((prev) => prev.filter((b) => b._id !== id));
         }

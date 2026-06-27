@@ -66,7 +66,7 @@ const VehicleDetails = () => {
   useEffect(() => {
     const fetchVehicleDetails = async () => {
       try {
-        const res = await api.get(`/vehicles/${id}`);
+        const res = await api.get(`/api/vehicles/${id}`);
         if (res.data && res.data.success) {
           setVehicle(res.data.vehicle);
         }
@@ -139,7 +139,7 @@ const VehicleDetails = () => {
         vehicleId: id,
       };
 
-      const res = await api.post('/bookings', payload);
+      const res = await api.post('/api/bookings', payload);
       if (res.data && res.data.success) {
         setSubmitSuccess(true);
       }

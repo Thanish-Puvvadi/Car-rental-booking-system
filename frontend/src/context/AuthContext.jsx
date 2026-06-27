@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const res = await api.get('/auth/profile');
+          const res = await api.get('/api/auth/profile');
           if (res.data && res.data.success) {
             setUser(res.data.user);
             localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await api.post('/auth/login', { email, password });
+      const res = await api.post('/api/auth/login', { email, password });
       if (res.data && res.data.success) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await api.post('/auth/register', userData);
+      const res = await api.post('/api/auth/register', userData);
       if (res.data && res.data.success) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await api.put('/auth/profile', userData);
+      const res = await api.put('/api/auth/profile', userData);
       if (res.data && res.data.success) {
         localStorage.setItem('user', JSON.stringify(res.data.user));
         setUser(res.data.user);

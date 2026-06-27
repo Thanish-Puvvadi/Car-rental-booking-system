@@ -17,7 +17,7 @@ const Fleet = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const res = await api.get('/vehicles');
+        const res = await api.get('/api/vehicles');
         if (res.data && res.data.success) {
           setVehicles(res.data.vehicles);
         }

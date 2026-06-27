@@ -107,7 +107,7 @@ const OperationsDashboard = () => {
       setError(null);
       
       // Fetch Dashboard Stats & Charts & Logs
-      const statsRes = await api.get('/reports/dashboard-stats');
+      const statsRes = await api.get('/api/reports/dashboard-stats');
       if (statsRes.data && statsRes.data.success) {
         setStats(statsRes.data.stats);
         setCharts(statsRes.data.charts);
@@ -117,39 +117,39 @@ const OperationsDashboard = () => {
       }
 
       // Fetch Bookings list
-      const bookingsRes = await api.get('/bookings');
+      const bookingsRes = await api.get('/api/bookings');
       if (bookingsRes.data && bookingsRes.data.success) {
         setBookings(bookingsRes.data.bookings);
       }
 
       // Fetch Drivers list (if allowed)
       if (user.role === 'admin' || user.role === 'driver_coordinator') {
-        const driversRes = await api.get('/drivers');
+        const driversRes = await api.get('/api/drivers');
         if (driversRes.data && driversRes.data.success) {
           setDrivers(driversRes.data.drivers);
         }
       }
 
       // Fetch Vehicles list
-      const vehiclesRes = await api.get('/vehicles');
+      const vehiclesRes = await api.get('/api/vehicles');
       if (vehiclesRes.data && vehiclesRes.data.success) {
         setVehicles(vehiclesRes.data.vehicles);
       }
 
       // Fetch Payments list
-      const paymentsRes = await api.get('/payments');
+      const paymentsRes = await api.get('/api/payments');
       if (paymentsRes.data && paymentsRes.data.success) {
         setPayments(paymentsRes.data.payments);
       }
 
       // Fetch Enquiries list
-      const enquiriesRes = await api.get('/enquiries');
+      const enquiriesRes = await api.get('/api/enquiries');
       if (enquiriesRes.data && enquiriesRes.data.success) {
         setEnquiries(enquiriesRes.data.enquiries);
       }
 
       // Fetch message logs history
-      const logsRes = await api.get('/reports/message-logs');
+      const logsRes = await api.get('/api/reports/message-logs');
       if (logsRes.data && logsRes.data.success) {
         setMessageLogs(logsRes.data.logs);
       }
@@ -175,7 +175,7 @@ const OperationsDashboard = () => {
   // Status transitions helper
   const updateBookingStatus = async (bookingId, newStatus) => {
     try {
-      const res = await api.put(`/bookings/${bookingId}/status`, { status: newStatus });
+      const res = await api.put(`/api/bookings/${bookingId}/status`, { status: newStatus });
       if (res.data && res.data.success) {
         alert(`Booking state progressed to '${newStatus}'!`);
         fetchData();
@@ -194,7 +194,7 @@ const OperationsDashboard = () => {
   const handleDeleteBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to remove this booking request?')) return;
     try {
-      const res = await api.delete(`/bookings/${bookingId}`);
+      const res = await api.delete(`/api/bookings/${bookingId}`);
       if (res.data && res.data.success) {
         alert('Booking successfully removed.');
         fetchData();
@@ -212,7 +212,7 @@ const OperationsDashboard = () => {
       return;
     }
     try {
-      const res = await api.put(`/bookings/${bookingId}/assign-driver`, { driverId });
+      const res = await api.put(`/api/bookings/${bookingId}/assign-driver`, { driverId });
       if (res.data && res.data.success) {
         alert('Driver Assigned successfully!');
         fetchData();
@@ -237,7 +237,7 @@ const OperationsDashboard = () => {
   const handleRecordPaymentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/payments', {
+      const res = await api.post('/api/payments', {
         bookingId: selectedBookingForPayment._id,
         amount: Number(paymentForm.amount),
         paymentMethod: paymentForm.paymentMethod,
@@ -257,7 +257,7 @@ const OperationsDashboard = () => {
   const handleDriverSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/drivers', {
+      const res = await api.post('/api/drivers', {
         ...driverForm,
         experience: Number(driverForm.experience)
       });
@@ -282,7 +282,7 @@ const OperationsDashboard = () => {
   const handleDeleteDriver = async (driverId) => {
     if (!window.confirm('Delete driver from database roster?')) return;
     try {
-      const res = await api.delete(`/drivers/${driverId}`);
+      const res = await api.delete(`/api/drivers/${driverId}`);
       if (res.data && res.data.success) {
         alert('Driver deleted.');
         fetchData();
@@ -296,7 +296,7 @@ const OperationsDashboard = () => {
   const toggleDriverStatus = async (driver) => {
     const nextStatus = driver.availabilityStatus === 'Available' ? 'Busy' : 'Available';
     try {
-      const res = await api.put(`/drivers/${driver._id}`, { availabilityStatus: nextStatus });
+      const res = await api.put(`/api/drivers/${driver._id}`, { availabilityStatus: nextStatus });
       if (res.data && res.data.success) {
         fetchData();
       }
@@ -309,7 +309,7 @@ const OperationsDashboard = () => {
   const handleVehicleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/vehicles', {
+      const res = await api.post('/api/vehicles', {
         ...vehicleForm,
         dailyPrice: Number(vehicleForm.dailyPrice),
         seatingCapacity: Number(vehicleForm.seatingCapacity)
@@ -339,7 +339,7 @@ const OperationsDashboard = () => {
   const handleDeleteVehicle = async (vehicleId) => {
     if (!window.confirm('Remove this vehicle permanently from active inventory?')) return;
     try {
-      const res = await api.delete(`/vehicles/${vehicleId}`);
+      const res = await api.delete(`/api/vehicles/${vehicleId}`);
       if (res.data && res.data.success) {
         alert('Vehicle deleted.');
         fetchData();
@@ -352,7 +352,7 @@ const OperationsDashboard = () => {
   // Vehicle status toggling
   const changeVehicleStatus = async (vehicleId, nextStatus) => {
     try {
-      const res = await api.put(`/vehicles/${vehicleId}`, { availabilityStatus: nextStatus });
+      const res = await api.put(`/api/vehicles/${vehicleId}`, { availabilityStatus: nextStatus });
       if (res.data && res.data.success) {
         fetchData();
       }
@@ -1342,7 +1342,7 @@ const OperationsDashboard = () => {
             onSubmit={async (e) => {
               e.preventDefault();
               try {
-                const res = await api.put(`/enquiries/${selectedEnquiry._id}`, {
+                const res = await api.put(`/api/enquiries/${selectedEnquiry._id}`, {
                   status: enquiryStatus,
                   notes: enquiryNotes
                 });

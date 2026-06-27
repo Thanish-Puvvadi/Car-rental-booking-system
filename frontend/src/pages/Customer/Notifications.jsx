@@ -10,7 +10,7 @@ const Notifications = () => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await api.get('/notifications');
+      const res = await api.get('/api/notifications');
       if (res.data && res.data.success) {
         setNotifications(res.data.notifications);
       }
@@ -27,7 +27,7 @@ const Notifications = () => {
 
   const handleMarkAllRead = async () => {
     try {
-      const res = await api.put('/notifications/read');
+      const res = await api.put('/api/notifications/read');
       if (res.data && res.data.success) {
         setNotifications(prev => prev.map(n => ({ ...n, read: true })));
       }

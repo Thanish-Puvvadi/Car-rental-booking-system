@@ -24,13 +24,13 @@ const BookingDetails = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const res = await api.get(`/bookings/${id}`);
+        const res = await api.get(`/api/bookings/${id}`);
         if (res.data && res.data.success) {
           setBooking(res.data.booking);
         }
 
         // Fetch payments to check if invoice is ready
-        const payRes = await api.get('/payments');
+        const payRes = await api.get('/api/payments');
         if (payRes.data && payRes.data.success) {
           setPayments(payRes.data.payments);
         }

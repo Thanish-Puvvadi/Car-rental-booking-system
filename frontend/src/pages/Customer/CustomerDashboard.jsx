@@ -23,7 +23,7 @@ const CustomerDashboard = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const res = await api.get('/bookings');
+        const res = await api.get('/api/bookings');
         if (res.data && res.data.success) {
           setBookings(res.data.bookings);
         }

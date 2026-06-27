@@ -60,7 +60,7 @@ const Home = () => {
     setEnquiryLoading(true);
     setEnquirySuccess(false);
     try {
-      const res = await api.post('/enquiries', enquiryForm);
+      const res = await api.post('/api/enquiries', enquiryForm);
       if (res.data && res.data.success) {
         setEnquirySuccess(true);
         setEnquiryForm({ name: '', email: '', message: '' });
@@ -95,7 +95,7 @@ const Home = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const res = await api.get('/vehicles?availabilityStatus=Available');
+        const res = await api.get('/api/vehicles?availabilityStatus=Available');
         if (res.data && res.data.success) {
           setVehicles(res.data.vehicles);
         }
@@ -183,7 +183,7 @@ const Home = () => {
 
     try {
       // Create the booking
-      const res = await api.post('/bookings', formData);
+      const res = await api.post('/api/bookings', formData);
       if (res.data && res.data.success) {
         setSubmitSuccess(true);
 

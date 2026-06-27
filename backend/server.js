@@ -14,7 +14,16 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (origin.startsWith('http://localhost') || origin.includes('vercel.app') || origin === process.env.FRONTEND_URL) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Allow all for now to prevent deployment blocks, adjust in production
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
@@ -28,16 +37,12 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// Serve static assets from Vite production build
-const path = require('path');
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// SPA Routing fallback
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return next();
-  }
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+// Basic Health Check Endpoint
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend running"
+  });
 });
 
 // Global Error Handler
