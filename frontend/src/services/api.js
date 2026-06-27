@@ -1,46 +1,34 @@
 import axios from 'axios';
 
-const getBaseURL = () => {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-  // Fallback to Express backend if on Vite dev server, otherwise route relatively
-  return window.location.port === '3000' ? 'http://localhost:5000/api' : '/api';
-};
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: getBaseURL(),
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-// Request interceptor to attach JWT token
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+});
 
-// Response interceptor to handle authorization expiration (401)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      console.warn('Unauthorized request, clearing local session...');
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      // Only redirect if not already on login/register page to prevent loops
-      const path = window.location.pathname;
-      if (path !== '/login' && path !== '/register') {
-        window.location.href = '/login';
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
+      ) {
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);
@@ -48,3 +36,4 @@ api.interceptors.response.use(
 );
 
 export default api;
+
